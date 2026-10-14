@@ -1,2 +1,2 @@
-# hacker-lol
+# hacker
 my website conf
