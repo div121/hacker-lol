@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Loyola News</title>
+    <title>Loyola News </title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -12,24 +12,12 @@
             theme: {
                 extend: {
                     colors: {
-                        cyber: {
-                            50: '#f0fdfa',
-                            100: '#ccfbf1',
-                            500: '#14b8a6',
-                            600: '#0d9488',
-                            900: '#0f172a',
-                            950: '#020617',
-                        },
-                        accent: {
-                            cyan: '#06b6d4',
-                            pink: '#ec4899',
-                            emerald: '#10b981',
-                            amber: '#f59e0b'
+                        brand: {
+                            50: '#f0fdf4',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
                         }
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
-                        mono: ['JetBrains Mono', 'Courier New', 'monospace'],
                     }
                 }
             }
@@ -37,690 +25,585 @@
     </script>
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        /* Custom scrollbar and ambient glowing backdrops */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #090d16;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #1e293b;
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #06b6d4;
-        }
-        .glow-effect {
-            box-shadow: 0 0 25px -5px rgba(6, 182, 212, 0.25);
-        }
-        .glow-pink {
-            box-shadow: 0 0 25px -5px rgba(236, 72, 153, 0.25);
-        }
-        /* Custom grid background effect */
-        .bg-grid-pattern {
-            background-size: 30px 30px;
-            background-image: linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-                              linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-        }
+        body { font-family: 'Inter', sans-serif; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #18181b; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 4px; }
     </style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen font-sans bg-grid-pattern flex flex-col justify-between selection:bg-cyan-500 selection:text-black">
+<body class="bg-zinc-950 text-zinc-100 min-h-screen flex flex-col antialiased">
 
-    <!-- TOP HEADER / BANNER -->
-    <div>
-        <header class="relative border-b border-slate-800 bg-slate-900/80 backdrop-blur-md sticky top-0 z-30">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col md:flex-row items-center justify-between gap-4">
-                
-                <!-- Title Section -->
-                <div class="text-center md:text-left flex items-center space-x-4">
-                    <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-cyan-500 to-emerald-400 flex items-center justify-center text-slate-950 font-black text-2xl shadow-lg shadow-cyan-500/20">
-                        ⚡
-                    </div>
-                    <div>
-                        <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight bg-gradient-to-r from-cyan-400 via-teal-300 to-emerald-400 bg-clip-text text-transparent">
-                            UNOFFICIAL SCHOOL NEWS & BLOG
-                        </h1>
-                        <p class="text-xs sm:text-sm text-slate-400 flex items-center justify-center md:justify-start gap-2">
-                            <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Unfiltered Campus Pulse & Underground Chronicles
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Admin Lock & Actions Bar -->
-                <div class="flex items-center space-x-3 w-full md:w-auto justify-end">
-                    <!-- Search Input -->
-                    <div class="relative w-full md:w-48">
-                        <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-sm"></i>
-                        <input type="text" id="searchInput" oninput="renderAll()" placeholder="Search posts..." 
-                            class="w-full bg-slate-950 border border-slate-800 rounded-lg pl-9 pr-3 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-cyan-500 transition">
-                    </div>
-
-                    <!-- Sys-Admin Toggle Button -->
-                    <button id="adminToggleBtn" onclick="toggleAdminPrompt()" 
-                        class="flex items-center space-x-2 px-3 py-1.5 rounded-lg border text-xs font-semibold transition border-slate-700 bg-slate-900 hover:bg-slate-800 text-slate-300">
-                        <i id="adminLockIcon" class="fa-solid fa-lock text-amber-400"></i>
-                        <span id="adminStatusText">Sys-Admin</span>
-                    </button>
-                </div>
-            </div>
-        </header>
-
-        <!-- SUB-HEADER ANNOUNCEMENT TICKER -->
-        <div class="bg-cyan-950/40 border-b border-cyan-900/30 text-cyan-300 px-4 py-2 text-xs font-mono flex items-center justify-between">
-            <div class="max-w-7xl mx-auto w-full flex items-center space-x-3 overflow-hidden">
-                <span class="bg-cyan-500 text-slate-950 font-bold px-2 py-0.5 rounded text-[10px] tracking-wider uppercase flex-shrink-0">TICKER</span>
-                <marquee class="truncate text-slate-300" scrollamount="5">
-                    📢 Welcome to the unofficial campus portal! • Student submissions now open • Sys-admin reserves rights to purge spam • Join the discussion below!
-                </marquee>
-            </div>
-        </div>
-
-        <!-- MAIN CONTENT CONTAINER -->
-        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-
-            <!-- NAVIGATION TABS & ACTION BUTTONS -->
-            <div class="flex flex-col sm:flex-row items-center justify-between border-b border-slate-800 pb-4 mb-8 gap-4">
-                <!-- Tabs -->
-                <div class="flex space-x-2 bg-slate-900 p-1 rounded-xl border border-slate-800 w-full sm:w-auto">
-                    <button id="tabNewsBtn" onclick="switchTab('news')" 
-                        class="flex-1 sm:flex-initial px-6 py-2 rounded-lg font-semibold text-sm transition-all duration-200 flex items-center justify-center space-x-2 bg-cyan-500 text-slate-950 shadow-md">
-                        <i class="fa-solid fa-bullhorn"></i>
-                        <span>Official News</span>
-                    </button>
-                    <button id="tabBlogBtn" onclick="switchTab('blog')" 
-                        class="flex-1 sm:flex-initial px-6 py-2 rounded-lg font-semibold text-sm transition-all duration-200 flex items-center justify-center space-x-2 text-slate-400 hover:text-slate-100">
-                        <i class="fa-solid fa-users"></i>
-                        <span>Student Blog</span>
-                    </button>
-                </div>
-
-                <!-- Action Buttons (Context Sensitive) -->
-                <div class="flex items-center space-x-3 w-full sm:w-auto justify-end">
-                    <!-- Create Blog Post Button (Visible to everyone in Blog tab) -->
-                    <button id="createBlogBtn" onclick="openPostModal('blog')" 
-                        class="hidden bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white font-bold px-4 py-2 rounded-xl text-sm transition shadow-lg glow-pink flex items-center space-x-2">
-                        <i class="fa-solid fa-pen-nib"></i>
-                        <span>Write a Post</span>
-                    </button>
-
-                    <!-- Create News Post Button (Admin ONLY) -->
-                    <button id="createNewsBtn" onclick="openPostModal('news')" 
-                        class="hidden bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-600 hover:to-teal-600 text-slate-950 font-bold px-4 py-2 rounded-xl text-sm transition shadow-lg glow-effect items-center space-x-2">
-                        <i class="fa-solid fa-plus-circle"></i>
-                        <span>Post News (Admin)</span>
-                    </button>
-
-                    <!-- Export/Backup JSON Data -->
-                    <button onclick="exportData()" title="Backup Posts Data JSON" 
-                        class="p-2 bg-slate-900 hover:bg-slate-800 border border-slate-800 rounded-xl text-slate-400 hover:text-slate-200 text-sm transition">
-                        <i class="fa-solid fa-download"></i>
-                    </button>
-                </div>
-            </div>
-
-            <!-- TAB 1: OFFICIAL NEWS SECTION -->
-            <section id="newsSection" class="space-y-6">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <h2 class="text-xl font-bold text-slate-100 flex items-center gap-2">
-                            <span class="w-2.5 h-2.5 rounded-full bg-cyan-400"></span> Official Bulletins
-                        </h2>
-                        <p class="text-xs text-slate-400">Verified campus announcements provided by Sys-Admin</p>
-                    </div>
-                </div>
-
-                <!-- News Grid Container -->
-                <div id="newsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <!-- Dynamic News Cards Inject Here -->
-                </div>
-            </section>
-
-            <!-- TAB 2: STUDENT BLOG SECTION -->
-            <section id="blogSection" class="space-y-6 hidden">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <h2 class="text-xl font-bold text-slate-100 flex items-center gap-2">
-                            <span class="w-2.5 h-2.5 rounded-full bg-pink-500"></span> Community Hub
-                        </h2>
-                        <p class="text-xs text-slate-400">Open mic section for students to share projects, thoughts, & rumors</p>
-                    </div>
-                </div>
-
-                <!-- Blog Feed Grid Container -->
-                <div id="blogGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <!-- Dynamic Blog Cards Inject Here -->
-                </div>
-            </section>
-
-        </main>
-    </div>
-
-    <!-- FOOTER -->
-    <footer class="border-t border-slate-800 bg-slate-950/80 py-6 mt-12">
-        <div class="max-w-7xl mx-auto px-4 text-center text-xs text-slate-500 flex flex-col sm:flex-row justify-between items-center gap-2">
-            <div>
-                &copy; <span id="year"></span> Unofficial School News Board. Built for freedom of speech.
-            </div>
-            <div class="flex items-center space-x-4">
-                <button onclick="resetToDefaults()" class="hover:underline text-slate-600 hover:text-slate-400">Reset Local Storage</button>
-                <span>•</span>
-                <span class="font-mono text-slate-600">SYS-ADMIN: ACTIVE</span>
-            </div>
-        </div>
-    </footer>
-
-
-    <!-- MODAL: WRITE / EDIT POST -->
-    <div id="postModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-xl p-6 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+    <!-- NAVIGATION HEADER -->
+    <header class="border-b border-zinc-800 bg-zinc-900/80 backdrop-blur sticky top-0 z-30">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-4">
             
-            <!-- Close Button -->
-            <button onclick="closePostModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-100 text-lg">
-                <i class="fa-solid fa-xmark"></i>
+            <!-- Branding (Lightning Icon Removed) -->
+            <div class="flex flex-col">
+                <h1 class="text-xl md:text-2xl font-extrabold tracking-tight text-white flex items-center gap-2">
+                    Loyola News and student blogs
+                </h1>
+                <p class="text-xs text-zinc-400 font-medium">All the affairs, here</p>
+            </div>
+
+            <!-- Header Controls: Admin Toggle & New Post Button -->
+            <div class="flex items-center gap-3">
+                <button id="adminToggleBtn" onclick="toggleAdminModal()" class="px-3 py-1.5 text-xs font-semibold rounded-lg border border-zinc-700 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 transition flex items-center gap-2">
+                    <i class="fa-solid fa-lock text-zinc-400" id="adminLockIcon"></i>
+                    <span id="adminBtnText">Sys-Admin Locked</span>
+                </button>
+
+                <button onclick="openCreatePostModal()" class="px-4 py-1.5 text-xs font-semibold rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white transition shadow-lg shadow-emerald-900/30 flex items-center gap-2">
+                    <i class="fa-solid fa-plus"></i> New Post
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTAINER -->
+    <main class="max-w-6xl mx-auto px-4 py-6 flex-grow w-full">
+        
+        <!-- TABS & SEARCH / FILTER BAR -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 pb-4 border-b border-zinc-800">
+            
+            <!-- Tab Switching -->
+            <div class="flex bg-zinc-900 p-1 rounded-xl border border-zinc-800 self-start">
+                <button id="tabOfficialBtn" onclick="switchTab('official')" class="px-4 py-2 text-xs font-bold rounded-lg transition-all text-white bg-zinc-800 shadow">
+                    <i class="fa-solid fa-bullhorn mr-1.5 text-emerald-400"></i> Official News
+                </button>
+                <button id="tabStudentBtn" onclick="switchTab('student')" class="px-4 py-2 text-xs font-bold rounded-lg transition-all text-zinc-400 hover:text-white">
+                    <i class="fa-solid fa-user-pen mr-1.5 text-emerald-400"></i> Student Blogs
+                </button>
+            </div>
+
+            <!-- Search & Admin Status Badge -->
+            <div class="flex items-center gap-3 w-full md:w-auto">
+                <div class="relative w-full md:w-64">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500 text-xs"></i>
+                    <input type="text" id="searchInput" oninput="renderPosts()" placeholder="Search posts..." class="w-full bg-zinc-900 border border-zinc-800 rounded-lg pl-9 pr-3 py-1.5 text-xs text-zinc-200 focus:outline-none focus:border-emerald-500 transition">
+                </div>
+                <button onclick="exportData()" title="Backup Posts Data" class="p-2 text-zinc-400 hover:text-white bg-zinc-900 border border-zinc-800 rounded-lg text-xs">
+                    <i class="fa-solid fa-download"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- ADMIN MODE INDICATOR BANNER -->
+        <div id="adminBanner" class="hidden mb-6 p-3 bg-amber-500/10 border border-amber-500/30 rounded-xl text-amber-400 text-xs flex items-center justify-between">
+            <span class="flex items-center gap-2">
+                <i class="fa-solid fa-shield-halved"></i> <strong>Sys-Admin Mode Active:</strong> You have authorization to publish Official News and delete posts.
+            </span>
+            <button onclick="logoutAdmin()" class="underline hover:text-amber-300 font-bold">Lock Admin</button>
+        </div>
+
+        <!-- FEED LIST VIEW -->
+        <div id="feedView">
+            <div id="postsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                <!-- Posts dynamic insertion -->
+            </div>
+            
+            <div id="emptyState" class="hidden text-center py-16">
+                <i class="fa-regular fa-folder-open text-4xl text-zinc-600 mb-3 block"></i>
+                <p class="text-zinc-400 text-sm font-medium">No posts found in this section.</p>
+            </div>
+        </div>
+
+        <!-- DETAILED SINGLE POST VIEW -->
+        <div id="detailView" class="hidden max-w-3xl mx-auto bg-zinc-900/60 border border-zinc-800 rounded-2xl p-6 md:p-8 backdrop-blur-sm">
+            <button onclick="closeDetailView()" class="mb-6 px-4 py-2 text-xs font-semibold rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-300 transition flex items-center gap-2">
+                <i class="fa-solid fa-arrow-left"></i> ← Back to Feed
             </button>
 
-            <!-- Modal Title -->
-            <h3 id="modalHeading" class="text-xl font-bold text-slate-100 mb-1">Create New Post</h3>
-            <p id="modalSubheading" class="text-xs text-slate-400 mb-6">Publish directly to the school board</p>
+            <div id="detailContent">
+                <!-- Dynamic post detailed content will go here -->
+            </div>
+        </div>
 
-            <form id="postForm" onsubmit="handlePostSubmit(event)" class="space-y-4">
-                <input type="hidden" id="postTargetType" value="blog">
+    </main>
 
-                <!-- Title -->
-                <div>
-                    <label class="block text-xs font-semibold text-slate-300 mb-1">Post Title *</label>
-                    <input type="text" id="postTitle" required placeholder="e.g. Cafeteria Pizza Review or Hackathon Announced" 
-                        class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-cyan-500">
-                </div>
+    <!-- FOOTER -->
+    <footer class="border-t border-zinc-800 py-6 text-center text-xs text-zinc-500 mt-12">
+        <p>Loyola News & Student Blogs &bull; Built with HTML & Tailwind CSS</p>
+    </footer>
 
-                <!-- Author & Tag (2 Columns) -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-300 mb-1">Author / Handle *</label>
-                        <input type="text" id="postAuthor" required placeholder="e.g. AnonStudent or @tech_kid" 
-                            class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-cyan-500">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-300 mb-1">Category Tag</label>
-                        <select id="postTag" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-cyan-500">
-                            <option value="General">General</option>
-                            <option value="Important">Important</option>
-                            <option value="Events">Events</option>
-                            <option value="Sports">Sports</option>
-                            <option value="Gaming">Gaming</option>
-                            <option value="Rumors">Rumors</option>
-                        </select>
-                    </div>
-                </div>
-
-                <!-- Main Content Textarea -->
-                <div>
-                    <label class="block text-xs font-semibold text-slate-300 mb-1">Content / Message *</label>
-                    <textarea id="postContent" rows="5" required placeholder="Type your full post text here..." 
-                        class="w-full bg-slate-950 border border-slate-800 rounded-xl p-4 text-sm text-slate-100 focus:outline-none focus:border-cyan-500 resize-none"></textarea>
-                </div>
-
-                <!-- Image Attachment Section (URL or File Upload) -->
-                <div class="bg-slate-950 p-4 rounded-xl border border-slate-800/80 space-y-3">
-                    <label class="block text-xs font-semibold text-slate-300">Attach Image (Optional)</label>
-                    
-                    <!-- Choice 1: URL -->
-                    <div>
-                        <input type="url" id="postImageUrl" placeholder="Paste Image URL (https://...)" 
-                            oninput="previewImageInput()"
-                            class="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-cyan-500">
-                    </div>
-
-                    <div class="text-center text-[10px] text-slate-500 font-bold uppercase tracking-wider">— OR UPLOAD FILE —</div>
-
-                    <!-- Choice 2: File Upload -->
-                    <div>
-                        <input type="file" id="postImageFile" accept="image/*" onchange="handleFileUpload(event)" 
-                            class="block w-full text-xs text-slate-400 file:mr-4 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-slate-800 file:text-slate-200 hover:file:bg-slate-700 cursor-pointer">
-                    </div>
-
-                    <!-- Image Preview Area -->
-                    <div id="imagePreviewContainer" class="hidden mt-2 relative">
-                        <img id="imagePreview" src="" alt="Preview" class="max-h-36 w-full object-cover rounded-lg border border-slate-800">
-                        <button type="button" onclick="clearImagePreview()" class="absolute top-2 right-2 bg-slate-950/80 text-rose-400 p-1.5 rounded-full hover:bg-slate-900 text-xs">
-                            <i class="fa-solid fa-trash"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Submit Button -->
-                <div class="pt-2 flex justify-end space-x-3">
-                    <button type="button" onclick="closePostModal()" class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-slate-200">
-                        Cancel
-                    </button>
-                    <button type="submit" class="bg-gradient-to-r from-cyan-500 to-emerald-400 text-slate-950 font-bold px-6 py-2 rounded-xl text-xs transition hover:opacity-90 shadow-lg">
-                        Publish Post
-                    </button>
+    <!-- SYS-ADMIN MODAL -->
+    <div id="adminModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden">
+        <div class="bg-zinc-900 border border-zinc-800 w-full max-w-md rounded-2xl p-6 shadow-2xl relative">
+            <h3 class="text-lg font-bold text-white mb-2 flex items-center gap-2">
+                <i class="fa-solid fa-user-shield text-emerald-500"></i> Sys-Admin Authentication
+            </h3>
+            <p class="text-xs text-zinc-400 mb-4">Enter the administrative passcode to access restricted delete features and official news publishing.</p>
+            
+            <form onsubmit="handleAdminAuth(event)">
+                <input type="password" id="adminPasscode" placeholder="Enter Sys-Admin Passcode" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2.5 text-sm text-zinc-200 mb-4 focus:outline-none focus:border-emerald-500">
+                <div id="adminAuthError" class="text-rose-500 text-xs mb-3 hidden">Incorrect Passcode. Try again.</div>
+                <div class="flex justify-end gap-2">
+                    <button type="button" onclick="toggleAdminModal()" class="px-4 py-2 text-xs font-semibold text-zinc-400 hover:text-white rounded-lg">Cancel</button>
+                    <button type="submit" class="px-4 py-2 text-xs font-semibold bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg">Unlock Admin Mode</button>
                 </div>
             </form>
         </div>
     </div>
 
+    <!-- CREATE POST MODAL -->
+    <div id="createPostModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden">
+        <div class="bg-zinc-900 border border-zinc-800 w-full max-w-xl rounded-2xl p-6 shadow-2xl max-h-[90vh] overflow-y-auto custom-scrollbar">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-bold text-white" id="modalTitle">Create Student Post</h3>
+                <button onclick="closeCreatePostModal()" class="text-zinc-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
 
-    <!-- JAVASCRIPT APP LOGIC -->
+            <form onsubmit="handleCreatePost(event)" class="space-y-4">
+                
+                <div id="officialPostNotice" class="hidden p-3 bg-emerald-950/40 border border-emerald-800/50 rounded-xl text-emerald-300 text-xs">
+                    <i class="fa-solid fa-circle-check mr-1"></i> You are publishing an <strong>Official News</strong> post as Sys-Admin.
+                </div>
+
+                <div>
+                    <label class="block text-xs font-medium text-zinc-300 mb-1">Post Title *</label>
+                    <input type="text" id="postTitle" required placeholder="e.g., Campus Library Hours Extended" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2 text-sm text-zinc-200 focus:outline-none focus:border-emerald-500">
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-medium text-zinc-300 mb-1">Author / Handle *</label>
+                        <input type="text" id="postAuthor" required placeholder="e.g., Alex (Junior)" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2 text-sm text-zinc-200 focus:outline-none focus:border-emerald-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-zinc-300 mb-1">Category Tag</label>
+                        <input type="text" id="postTag" placeholder="e.g., Academics, Sports, Event" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2 text-sm text-zinc-200 focus:outline-none focus:border-emerald-500">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-medium text-zinc-300 mb-1">Image Attachment (Optional)</label>
+                    <div class="flex flex-col gap-2">
+                        <input type="url" id="postImageUrl" placeholder="Paste Image URL..." class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2 text-xs text-zinc-200 focus:outline-none focus:border-emerald-500">
+                        <div class="text-center text-xs text-zinc-500 font-semibold my-0.5">OR UPLOAD FILE</div>
+                        <input type="file" id="postImageFile" accept="image/*" class="text-xs text-zinc-400 file:mr-4 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-zinc-800 file:text-zinc-300 hover:file:bg-zinc-700 cursor-pointer">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-medium text-zinc-300 mb-1">Content Body *</label>
+                    <textarea id="postContent" required rows="5" placeholder="Write your full post content here..." class="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-4 text-sm text-zinc-200 focus:outline-none focus:border-emerald-500"></textarea>
+                </div>
+
+                <div class="flex justify-end gap-3 pt-2">
+                    <button type="button" onclick="closeCreatePostModal()" class="px-4 py-2 text-xs font-semibold text-zinc-400 hover:text-white">Cancel</button>
+                    <button type="submit" class="px-5 py-2 text-xs font-semibold bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg shadow-lg shadow-emerald-900/20">Publish Post</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MAIN JAVASCRIPT LOGIC -->
     <script>
-        // Global State Variables
-        let currentTab = 'news'; // 'news' or 'blog'
+        // CONFIG & CONSTANTS
+        const PASSCODE = 'admin@schoolnews1234';
+        const STORAGE_KEY = 'loyola_news_posts_v1';
+        const LIKES_STORAGE_KEY = 'loyola_news_user_likes';
+
+        // DEFAULT DATA
+        const defaultPosts = [
+            {
+                id: '1',
+                type: 'official',
+                title: 'New Student Center Renovation Completed',
+                author: 'Administration',
+                date: '2026-10-12',
+                tag: 'Campus Updates',
+                content: 'We are thrilled to announce that the renovation of the Loyola Student Center is officially complete! The upgraded lounge area features modern study pods, expanded seating, high-speed Wi-Fi access points, and an updated café bar serving local artisan coffee. All students are invited to the official opening ceremony on Friday at 10:00 AM.',
+                imageUrl: 'https://images.unsplash.com/photo-1541829070764-84a7d30dd3f3?auto=format&fit=crop&w=800&q=80',
+                likes: 42
+            },
+            {
+                id: '2',
+                type: 'official',
+                title: 'Midterm Examination Schedule Released',
+                author: 'Academic Office',
+                date: '2026-10-10',
+                tag: 'Academics',
+                content: 'The official timetable for the upcoming midterm examinations is now published on the student portal. Please check your personalized dashboard for subject timings and hall allocations. Any timetable clashes should be reported to the registrar office before the end of the week.',
+                imageUrl: '',
+                likes: 18
+            },
+            {
+                id: '3',
+                type: 'student',
+                title: 'Top 5 Quietest Study Spots on Campus During Finals',
+                author: 'Maya S. (Computer Science)',
+                date: '2026-10-14',
+                tag: 'Student Life',
+                content: 'Finding a quiet place to study during finals week can be super stressful. Here is my personal list of underrated, quiet places to focus without distraction:\n\n1. Science Wing 3rd Floor Nook\n2. The Library Basement Archives Corner\n3. Arts Building Courtyard (when sunny)\n4. Engineering Building Mezzanine\n5. The Old Chapel Reading Room.',
+                imageUrl: 'https://images.unsplash.com/photo-1521587760476-6c12a4b040da?auto=format&fit=crop&w=800&q=80',
+                likes: 31
+            }
+        ];
+
+        // STATE MANAGEMENT
+        let currentTab = 'official'; // 'official' | 'student'
         let isAdmin = false;
-        let adminPasscode = "admin123"; // Default Sys-Admin secret key
-        let uploadedBase64Image = "";
+        let posts = [];
+        let userLikedPostIds = [];
 
-        // Default Initial Data Seeds (Stored into localStorage if empty)
-        const initialData = {
-            news: [
-                {
-                    id: 'news-1',
-                    title: 'New Wi-Fi Bandwidth Limits Enforced Across Campus',
-                    author: 'Sys-Admin',
-                    tag: 'Important',
-                    date: 'Oct 15, 2026',
-                    content: 'Administration has capped bandwidth to 5 Mbps on school endpoints. We are investigating workarounds and proxy tunnels. Stay tuned.',
-                    image: 'https://images.unsplash.com/photo-1544197150-b99a580bb7a8?auto=format&fit=crop&w=800&q=80',
-                    upvotes: 42
-                },
-                {
-                    id: 'news-2',
-                    title: 'Annual Robotics CTF Tournament Announced',
-                    author: 'Sys-Admin',
-                    tag: 'Events',
-                    date: 'Oct 12, 2026',
-                    content: 'Signups are open for the regional Cybersecurity & Robotics CTF taking place in the main auditorium next month. Great prizes included!',
-                    image: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=800&q=80',
-                    upvotes: 28
-                }
-            ],
-            blog: [
-                {
-                    id: 'blog-1',
-                    title: 'Cafeteria Mystery Meat: A Detailed Forensic Review',
-                    author: 'GourmetHacker',
-                    tag: 'Rumors',
-                    date: 'Oct 14, 2026',
-                    content: 'I analyzed today’s taco filling under a 400x lab microscope. Results are inconclusive, but high probability of recycled cardboard.',
-                    image: 'https://images.unsplash.com/photo-1565299585323-38d6b0865b47?auto=format&fit=crop&w=800&q=80',
-                    upvotes: 19
-                },
-                {
-                    id: 'blog-2',
-                    title: 'Best Hidden Study Spots with Working Power Outlets',
-                    author: '@night_coder',
-                    tag: 'General',
-                    date: 'Oct 11, 2026',
-                    content: 'Third floor library behind the old encyclopedia stack has two functional AC outlets and almost zero foot traffic.',
-                    image: '',
-                    upvotes: 35
-                }
-            ]
-        };
+        // INITIALIZATION
+        window.addEventListener('DOMContentLoaded', () => {
+            loadPosts();
+            loadLikedState();
+            renderPosts();
+        });
 
-        // On Window Load Initialization
-        window.onload = function() {
-            document.getElementById('year').innerText = new Date().getFullYear();
-            
-            // Seed localStorage if empty
-            if (!localStorage.getItem('school_board_news')) {
-                localStorage.setItem('school_board_news', JSON.stringify(initialData.news));
+        function loadPosts() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (saved) {
+                try { posts = JSON.parse(saved); } catch(e) { posts = defaultPosts; }
+            } else {
+                posts = defaultPosts;
+                savePosts();
             }
-            if (!localStorage.getItem('school_board_blog')) {
-                localStorage.setItem('school_board_blog', JSON.stringify(initialData.blog));
-            }
-
-            renderAll();
-        };
-
-        // Storage Helper Getters
-        function getPosts(type) {
-            const data = localStorage.getItem(`school_board_${type}`);
-            return data ? JSON.parse(data) : [];
         }
 
-        function savePosts(type, posts) {
-            localStorage.setItem(`school_board_${type}`, JSON.stringify(posts));
+        function savePosts() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(posts));
         }
 
-        // Tab Switching Logic
+        function loadLikedState() {
+            const savedLikes = localStorage.getItem(LIKES_STORAGE_KEY);
+            if (savedLikes) {
+                try { userLikedPostIds = JSON.parse(savedLikes); } catch(e) { userLikedPostIds = []; }
+            }
+        }
+
+        function saveLikedState() {
+            localStorage.setItem(LIKES_STORAGE_KEY, JSON.stringify(userLikedPostIds));
+        }
+
+        // TAB NAVIGATION
         function switchTab(tab) {
             currentTab = tab;
-            const newsBtn = document.getElementById('tabNewsBtn');
-            const blogBtn = document.getElementById('tabBlogBtn');
-            const newsSection = document.getElementById('newsSection');
-            const blogSection = document.getElementById('blogSection');
-            const createBlogBtn = document.getElementById('createBlogBtn');
-            const createNewsBtn = document.getElementById('createNewsBtn');
+            const officialBtn = document.getElementById('tabOfficialBtn');
+            const studentBtn = document.getElementById('tabStudentBtn');
 
-            if (tab === 'news') {
-                newsBtn.className = "flex-1 sm:flex-initial px-6 py-2 rounded-lg font-semibold text-sm transition-all duration-200 flex items-center justify-center space-x-2 bg-cyan-500 text-slate-950 shadow-md";
-                blogBtn.className = "flex-1 sm:flex-initial px-6 py-2 rounded-lg font-semibold text-sm transition-all duration-200 flex items-center justify-center space-x-2 text-slate-400 hover:text-slate-100";
-                
-                newsSection.classList.remove('hidden');
-                blogSection.classList.add('hidden');
-                createBlogBtn.classList.add('hidden');
-                
-                if (isAdmin) {
-                    createNewsBtn.classList.remove('hidden');
-                    createNewsBtn.classList.add('flex');
-                } else {
-                    createNewsBtn.classList.add('hidden');
-                }
+            if (tab === 'official') {
+                officialBtn.className = "px-4 py-2 text-xs font-bold rounded-lg transition-all text-white bg-zinc-800 shadow";
+                studentBtn.className = "px-4 py-2 text-xs font-bold rounded-lg transition-all text-zinc-400 hover:text-white";
             } else {
-                blogBtn.className = "flex-1 sm:flex-initial px-6 py-2 rounded-lg font-semibold text-sm transition-all duration-200 flex items-center justify-center space-x-2 bg-pink-500 text-white shadow-md glow-pink";
-                newsBtn.className = "flex-1 sm:flex-initial px-6 py-2 rounded-lg font-semibold text-sm transition-all duration-200 flex items-center justify-center space-x-2 text-slate-400 hover:text-slate-100";
-                
-                blogSection.classList.remove('hidden');
-                newsSection.classList.add('hidden');
-                createNewsBtn.classList.add('hidden');
-                
-                createBlogBtn.classList.remove('hidden');
-                createBlogBtn.classList.add('flex');
+                studentBtn.className = "px-4 py-2 text-xs font-bold rounded-lg transition-all text-white bg-zinc-800 shadow";
+                officialBtn.className = "px-4 py-2 text-xs font-bold rounded-lg transition-all text-zinc-400 hover:text-white";
             }
 
-            renderAll();
+            closeDetailView();
+            renderPosts();
         }
 
-        // Sys-Admin Lock / Unlock Toggle
-        function toggleAdminPrompt() {
-            if (isAdmin) {
-                // Logout Admin
-                isAdmin = false;
-                updateAdminUI();
-            } else {
-                // Prompt for passcode
-                const input = prompt("Enter Sys-Admin Passcode (Default: admin123):");
-                if (input === adminPasscode) {
-                    isAdmin = true;
-                    updateAdminUI();
-                } else if (input !== null) {
-                    alert("Invalid Passcode!");
-                }
-            }
-        }
+        // RENDER POSTS FEED
+        function renderPosts() {
+            const grid = document.getElementById('postsGrid');
+            const emptyState = document.getElementById('emptyState');
+            const searchQuery = document.getElementById('searchInput').value.toLowerCase();
 
-        function updateAdminUI() {
-            const lockIcon = document.getElementById('adminLockIcon');
-            const statusText = document.getElementById('adminStatusText');
-            const adminBtn = document.getElementById('adminToggleBtn');
-            const createNewsBtn = document.getElementById('createNewsBtn');
+            grid.innerHTML = '';
 
-            if (isAdmin) {
-                lockIcon.className = "fa-solid fa-unlock text-emerald-400";
-                statusText.innerText = "Admin Enabled";
-                adminBtn.className = "flex items-center space-x-2 px-3 py-1.5 rounded-lg border text-xs font-semibold transition border-emerald-500/50 bg-emerald-950/30 text-emerald-300";
-                
-                if (currentTab === 'news') {
-                    createNewsBtn.classList.remove('hidden');
-                    createNewsBtn.classList.add('flex');
-                }
+            const filteredPosts = posts.filter(post => {
+                const matchesTab = post.type === currentTab;
+                const matchesSearch = post.title.toLowerCase().includes(searchQuery) ||
+                                      post.content.toLowerCase().includes(searchQuery) ||
+                                      post.author.toLowerCase().includes(searchQuery) ||
+                                      (post.tag && post.tag.toLowerCase().includes(searchQuery));
+                return matchesTab && matchesSearch;
+            });
+
+            if (filteredPosts.length === 0) {
+                emptyState.classList.remove('hidden');
+                return;
             } else {
-                lockIcon.className = "fa-solid fa-lock text-amber-400";
-                statusText.innerText = "Sys-Admin";
-                adminBtn.className = "flex items-center space-x-2 px-3 py-1.5 rounded-lg border text-xs font-semibold transition border-slate-700 bg-slate-900 hover:bg-slate-800 text-slate-300";
-                createNewsBtn.classList.add('hidden');
+                emptyState.classList.add('hidden');
             }
 
-            renderAll();
-        }
+            filteredPosts.forEach(post => {
+                const isLiked = userLikedPostIds.includes(post.id);
+                const card = document.createElement('div');
+                card.className = "bg-zinc-900 border border-zinc-800/80 rounded-2xl overflow-hidden hover:border-zinc-700 transition flex flex-col justify-between group shadow-lg";
 
-        // Render Posts Grid
-        function renderAll() {
-            const query = document.getElementById('searchInput').value.toLowerCase();
-            
-            // Render News
-            const newsPosts = getPosts('news');
-            const filteredNews = newsPosts.filter(p => 
-                p.title.toLowerCase().includes(query) || 
-                p.content.toLowerCase().includes(query) ||
-                p.author.toLowerCase().includes(query) ||
-                p.tag.toLowerCase().includes(query)
-            );
-            renderGrid('newsGrid', filteredNews, 'news');
+                const imageHtml = post.imageUrl 
+                    ? `<div class="h-44 w-full overflow-hidden bg-zinc-950 cursor-pointer" onclick="openDetailView('${post.id}')">
+                         <img src="${post.imageUrl}" alt="Post image" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" onerror="this.style.display='none'">
+                       </div>`
+                    : '';
 
-            // Render Blog
-            const blogPosts = getPosts('blog');
-            const filteredBlog = blogPosts.filter(p => 
-                p.title.toLowerCase().includes(query) || 
-                p.content.toLowerCase().includes(query) ||
-                p.author.toLowerCase().includes(query) ||
-                p.tag.toLowerCase().includes(query)
-            );
-            renderGrid('blogGrid', filteredBlog, 'blog');
-        }
+                // Delete button STRICTLY rendered ONLY when isAdmin is true
+                const deleteButtonHtml = isAdmin 
+                    ? `<button onclick="deletePost('${post.id}', event)" title="Delete Post (Sys-Admin)" class="text-zinc-500 hover:text-rose-400 p-1.5 transition">
+                         <i class="fa-solid fa-trash-can"></i>
+                       </button>` 
+                    : '';
 
-        function renderGrid(containerId, posts, type) {
-            const container = document.getElementById(containerId);
-            container.innerHTML = '';
-
-            if (posts.length === 0) {
-                container.innerHTML = `
-                    <div class="col-span-full py-12 text-center text-slate-500 bg-slate-900/40 rounded-2xl border border-slate-800/80">
-                        <i class="fa-solid fa-folder-open text-3xl mb-2 text-slate-600"></i>
-                        <p class="text-sm font-semibold">No posts found in this section.</p>
+                card.innerHTML = `
+                    <div>
+                        ${imageHtml}
+                        <div class="p-5">
+                            <div class="flex items-center justify-between text-xs text-zinc-400 mb-2">
+                                <span class="bg-zinc-800 text-emerald-400 px-2.5 py-0.5 rounded-full font-medium text-[10px]">
+                                    ${escapeHtml(post.tag || 'General')}
+                                </span>
+                                <span>${post.date}</span>
+                            </div>
+                            <h3 onclick="openDetailView('${post.id}')" class="text-base font-bold text-white mb-2 line-clamp-2 hover:text-emerald-400 cursor-pointer transition">
+                                ${escapeHtml(post.title)}
+                            </h3>
+                            <p onclick="openDetailView('${post.id}')" class="text-xs text-zinc-400 line-clamp-3 mb-4 cursor-pointer">
+                                ${escapeHtml(post.content)}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="px-5 pb-5 pt-0 flex items-center justify-between border-t border-zinc-800/50 mt-auto pt-3">
+                        <span class="text-xs text-zinc-500 font-medium truncate max-w-[140px]">By ${escapeHtml(post.author)}</span>
+                        <div class="flex items-center gap-2">
+                            <button onclick="toggleLike('${post.id}', event)" class="flex items-center gap-1.5 px-2.5 py-1 rounded-lg border ${isLiked ? 'bg-emerald-950/50 border-emerald-700/60 text-emerald-400' : 'bg-zinc-800/60 border-zinc-700/50 text-zinc-400 hover:text-white'} transition text-xs">
+                                <i class="fa-solid fa-heart ${isLiked ? 'text-emerald-400' : ''}"></i>
+                                <span>${post.likes || 0}</span>
+                            </button>
+                            ${deleteButtonHtml}
+                        </div>
                     </div>
                 `;
-                return;
-            }
-
-            posts.forEach(post => {
-                const isNews = type === 'news';
-                const tagColor = getTagStyle(post.tag);
-
-                const cardHtml = `
-                    <article class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden flex flex-col justify-between hover:border-slate-700 transition duration-200 group relative">
-                        <div>
-                            <!-- Optional Image -->
-                            ${post.image ? `
-                                <div class="h-44 w-full overflow-hidden bg-slate-950 relative">
-                                    <img src="${post.image}" alt="${post.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" onerror="this.src='https://placehold.co/600x400/0f172a/06b6d4?text=Image+Unavailable'">
-                                </div>
-                            ` : ''}
-
-                            <div class="p-5 space-y-3">
-                                <!-- Meta Header: Tag & Date -->
-                                <div class="flex items-center justify-between text-xs">
-                                    <span class="px-2.5 py-0.5 rounded-md font-bold uppercase text-[10px] tracking-wider ${tagColor}">
-                                        ${post.tag}
-                                    </span>
-                                    <span class="text-slate-500 font-mono text-[11px]">${post.date}</span>
-                                </div>
-
-                                <!-- Title -->
-                                <h3 class="text-base font-bold text-slate-100 leading-snug group-hover:text-cyan-400 transition">
-                                    ${escapeHtml(post.title)}
-                                </h3>
-
-                                <!-- Content Body -->
-                                <p class="text-xs text-slate-400 line-clamp-3 leading-relaxed">
-                                    ${escapeHtml(post.content)}
-                                </p>
-                            </div>
-                        </div>
-
-                        <!-- Card Footer -->
-                        <div class="px-5 py-3 border-t border-slate-800/80 bg-slate-950/40 flex items-center justify-between text-xs">
-                            <span class="text-slate-400 font-mono text-[11px] flex items-center gap-1">
-                                <i class="fa-solid fa-user-circle text-slate-500"></i> ${escapeHtml(post.author)}
-                            </span>
-
-                            <div class="flex items-center space-x-3">
-                                <!-- Upvote Counter -->
-                                <button onclick="handleUpvote('${type}', '${post.id}')" class="flex items-center space-x-1 text-slate-400 hover:text-cyan-400 transition">
-                                    <i class="fa-solid fa-heart text-rose-500"></i>
-                                    <span class="font-bold text-slate-300 text-[11px]">${post.upvotes || 0}</span>
-                                </button>
-
-                                <!-- Admin Delete Button (Only visible if Admin unlocked or owner) -->
-                                ${(isAdmin || !isNews) ? `
-                                    <button onclick="deletePost('${type}', '${post.id}')" title="Delete Post" class="text-slate-600 hover:text-rose-400 transition">
-                                        <i class="fa-solid fa-trash text-xs"></i>
-                                    </button>
-                                ` : ''}
-                            </div>
-                        </div>
-                    </article>
-                `;
-
-                container.insertAdjacentHTML('beforeend', cardHtml);
+                grid.appendChild(card);
             });
         }
 
-        // Tag Color Helper
-        function getTagStyle(tag) {
-            switch(tag) {
-                case 'Important': return 'bg-rose-500/20 text-rose-400 border border-rose-500/30';
-                case 'Events': return 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/30';
-                case 'Sports': return 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30';
-                case 'Rumors': return 'bg-amber-500/20 text-amber-400 border border-amber-500/30';
-                case 'Gaming': return 'bg-purple-500/20 text-purple-400 border border-purple-500/30';
-                default: return 'bg-slate-800 text-slate-300 border border-slate-700';
+        // SINGLE POST DETAILED VIEW MECHANISM
+        function openDetailView(postId) {
+            const post = posts.find(p => p.id === postId);
+            if (!post) return;
+
+            const detailView = document.getElementById('detailView');
+            const feedView = document.getElementById('feedView');
+            const detailContent = document.getElementById('detailContent');
+
+            const isLiked = userLikedPostIds.includes(post.id);
+            const deleteButtonHtml = isAdmin 
+                ? `<button onclick="deletePost('${post.id}', event)" class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-rose-900/40 border border-rose-800 text-rose-300 hover:bg-rose-900/80 transition flex items-center gap-1.5">
+                     <i class="fa-solid fa-trash-can"></i> Delete Post
+                   </button>` 
+                : '';
+
+            const imageHtml = post.imageUrl 
+                ? `<div class="mb-6 rounded-xl overflow-hidden border border-zinc-800 max-h-96 w-full">
+                     <img src="${post.imageUrl}" class="w-full h-full object-cover" onerror="this.style.display='none'">
+                   </div>`
+                : '';
+
+            detailContent.innerHTML = `
+                <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+                    <span class="bg-zinc-800 text-emerald-400 px-3 py-1 rounded-full text-xs font-semibold">
+                        ${escapeHtml(post.tag || 'General')}
+                    </span>
+                    <span class="text-xs text-zinc-500">${post.date}</span>
+                </div>
+
+                <h1 class="text-2xl md:text-3xl font-extrabold text-white mb-3 tracking-tight leading-snug">
+                    ${escapeHtml(post.title)}
+                </h1>
+
+                <div class="flex items-center justify-between border-b border-zinc-800 pb-4 mb-6">
+                    <div class="text-xs text-zinc-400">
+                        Published by <strong class="text-zinc-200">${escapeHtml(post.author)}</strong>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <button onclick="toggleLike('${post.id}', event)" class="flex items-center gap-2 px-3 py-1.5 rounded-lg border ${isLiked ? 'bg-emerald-950/50 border-emerald-700/60 text-emerald-400' : 'bg-zinc-800 border-zinc-700 text-zinc-300 hover:text-white'} transition text-xs font-semibold">
+                            <i class="fa-solid fa-heart ${isLiked ? 'text-emerald-400' : ''}"></i>
+                            <span>${post.likes || 0} ${isLiked ? 'Liked' : 'Like'}</span>
+                        </button>
+                        ${deleteButtonHtml}
+                    </div>
+                </div>
+
+                ${imageHtml}
+
+                <div class="text-zinc-300 text-sm leading-relaxed whitespace-pre-line font-normal space-y-4">
+                    ${escapeHtml(post.content)}
+                </div>
+            `;
+
+            feedView.classList.add('hidden');
+            detailView.classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function closeDetailView() {
+            document.getElementById('detailView').classList.add('hidden');
+            document.getElementById('feedView').classList.remove('hidden');
+        }
+
+        // ONE-LIKE-PER-SESSION/DEVICE RESTRICTION
+        function toggleLike(postId, event) {
+            if (event) event.stopPropagation();
+            
+            const post = posts.find(p => p.id === postId);
+            if (!post) return;
+
+            const likedIndex = userLikedPostIds.indexOf(postId);
+
+            if (likedIndex > -1) {
+                // Unlike if already liked
+                userLikedPostIds.splice(likedIndex, 1);
+                post.likes = Math.max(0, (post.likes || 1) - 1);
+            } else {
+                // Like once
+                userLikedPostIds.push(postId);
+                post.likes = (post.likes || 0) + 1;
+            }
+
+            saveLikedState();
+            savePosts();
+            renderPosts();
+
+            // Refresh detailed view if currently viewing it
+            if (!document.getElementById('detailView').classList.contains('hidden')) {
+                openDetailView(postId);
             }
         }
 
-        // Upvote Function
-        function handleUpvote(type, id) {
-            const posts = getPosts(type);
-            const index = posts.findIndex(p => p.id === id);
-            if (index !== -1) {
-                posts[index].upvotes = (posts[index].upvotes || 0) + 1;
-                savePosts(type, posts);
-                renderAll();
-            }
-        }
+        // SYS-ADMIN DELETION RESTRICTION
+        function deletePost(postId, event) {
+            if (event) event.stopPropagation();
 
-        // Delete Post Function
-        function deletePost(type, id) {
-            if (!isAdmin && type === 'news') {
-                alert("Only Sys-Admin can delete Official News!");
+            // Strict authorization check
+            if (!isAdmin) {
+                alert("Unauthorized: Only Sys-Admin can delete posts!");
                 return;
             }
-            if (confirm("Are you sure you want to delete this post?")) {
-                let posts = getPosts(type);
-                posts = posts.filter(p => p.id !== id);
-                savePosts(type, posts);
-                renderAll();
+
+            if (confirm("Are you sure you want to permanently delete this post?")) {
+                posts = posts.filter(p => p.id !== postId);
+                savePosts();
+                closeDetailView();
+                renderPosts();
             }
         }
 
-        // Modal Controls
-        function openPostModal(targetType) {
-            document.getElementById('postTargetType').value = targetType;
-            document.getElementById('modalHeading').innerText = targetType === 'news' ? 'Post Official News' : 'Create Student Blog Post';
-            document.getElementById('modalSubheading').innerText = targetType === 'news' ? 'Will be published under Official Bulletins' : 'Public student post visible to everyone';
-            
-            document.getElementById('postForm').reset();
-            clearImagePreview();
-            
-            document.getElementById('postModal').classList.remove('hidden');
+        // ADMIN AUTHENTICATION
+        function toggleAdminModal() {
+            const modal = document.getElementById('adminModal');
+            modal.classList.toggle('hidden');
+            document.getElementById('adminAuthError').classList.add('hidden');
+            document.getElementById('adminPasscode').value = '';
         }
 
-        function closePostModal() {
-            document.getElementById('postModal').classList.add('hidden');
-        }
+        function handleAdminAuth(e) {
+            e.preventDefault();
+            const passcode = document.getElementById('adminPasscode').value;
 
-        // Image Handling
-        function previewImageInput() {
-            const url = document.getElementById('postImageUrl').value;
-            const container = document.getElementById('imagePreviewContainer');
-            const img = document.getElementById('imagePreview');
-
-            if (url) {
-                img.src = url;
-                container.classList.remove('hidden');
-                uploadedBase64Image = url;
-            } else if (!uploadedBase64Image) {
-                container.classList.add('hidden');
+            if (passcode === PASSCODE) {
+                isAdmin = true;
+                document.getElementById('adminLockIcon').className = 'fa-solid fa-lock-open text-emerald-400';
+                document.getElementById('adminBtnText').innerText = 'Sys-Admin Active';
+                document.getElementById('adminBanner').classList.remove('hidden');
+                toggleAdminModal();
+                renderPosts();
+            } else {
+                document.getElementById('adminAuthError').classList.remove('hidden');
             }
         }
 
-        function handleFileUpload(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                uploadedBase64Image = e.target.result;
-                document.getElementById('imagePreview').src = uploadedBase64Image;
-                document.getElementById('imagePreviewContainer').classList.remove('hidden');
-                document.getElementById('postImageUrl').value = ''; // clear text input
-            };
-            reader.readAsDataURL(file);
+        function logoutAdmin() {
+            isAdmin = false;
+            document.getElementById('adminLockIcon').className = 'fa-solid fa-lock text-zinc-400';
+            document.getElementById('adminBtnText').innerText = 'Sys-Admin Locked';
+            document.getElementById('adminBanner').classList.add('hidden');
+            renderPosts();
         }
 
-        function clearImagePreview() {
-            uploadedBase64Image = "";
-            document.getElementById('postImageUrl').value = "";
-            document.getElementById('postImageFile').value = "";
-            document.getElementById('imagePreviewContainer').classList.add('hidden');
+        // CREATE POST HANDLING
+        function openCreatePostModal() {
+            const modal = document.getElementById('createPostModal');
+            const notice = document.getElementById('officialPostNotice');
+            const modalTitle = document.getElementById('modalTitle');
+
+            if (isAdmin && currentTab === 'official') {
+                notice.classList.remove('hidden');
+                modalTitle.innerText = "Create Official News Post";
+            } else {
+                notice.classList.add('hidden');
+                modalTitle.innerText = "Create Student Post";
+            }
+
+            modal.classList.remove('hidden');
         }
 
-        // Post Submit Handler
-        function handlePostSubmit(event) {
-            event.preventDefault();
+        function closeCreatePostModal() {
+            document.getElementById('createPostModal').classList.add('hidden');
+        }
 
-            const targetType = document.getElementById('postTargetType').value;
+        async function handleCreatePost(e) {
+            e.preventDefault();
+
             const title = document.getElementById('postTitle').value;
             const author = document.getElementById('postAuthor').value;
             const tag = document.getElementById('postTag').value;
             const content = document.getElementById('postContent').value;
+            const urlInput = document.getElementById('postImageUrl').value;
+            const fileInput = document.getElementById('postImageFile').files[0];
 
-            const finalImage = uploadedBase64Image || document.getElementById('postImageUrl').value;
+            let finalImageUrl = urlInput;
+
+            if (fileInput) {
+                finalImageUrl = await convertFileToBase64(fileInput);
+            }
 
             const newPost = {
-                id: `${targetType}-${Date.now()}`,
+                id: Date.now().toString(),
+                type: (isAdmin && currentTab === 'official') ? 'official' : 'student',
                 title: title,
                 author: author,
-                tag: tag,
-                date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+                date: new Date().toISOString().split('T')[0],
+                tag: tag || 'General',
                 content: content,
-                image: finalImage,
-                upvotes: 0
+                imageUrl: finalImageUrl,
+                likes: 0
             };
 
-            const posts = getPosts(targetType);
-            posts.unshift(newPost); // Put new post on top
-            savePosts(targetType, posts);
+            posts.unshift(newPost);
+            savePosts();
+            closeCreatePostModal();
 
-            closePostModal();
-            renderAll();
+            // Reset form
+            e.target.reset();
+
+            // Render updated posts
+            renderPosts();
         }
 
-        // JSON Data Export
-        function exportData() {
-            const newsData = getPosts('news');
-            const blogData = getPosts('blog');
-            
-            const exportObject = {
-                exportedAt: new Date().toISOString(),
-                news: newsData,
-                blog: blogData
-            };
+        // UTILITY FUNCTIONS
+        function convertFileToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+            });
+        }
 
-            const jsonStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportObject, null, 2));
+        function exportData() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(posts, null, 2));
             const downloadAnchor = document.createElement('a');
-            downloadAnchor.setAttribute("href", jsonStr);
-            downloadAnchor.setAttribute("download", `school_board_backup_${Date.now()}.json`);
+            downloadAnchor.setAttribute("href", dataStr);
+            downloadAnchor.setAttribute("download", "loyola_news_backup.json");
             document.body.appendChild(downloadAnchor);
             downloadAnchor.click();
             downloadAnchor.remove();
         }
 
-        // Reset Local Storage to Default
-        function resetToDefaults() {
-            if (confirm("Reset local storage posts back to default sample items?")) {
-                localStorage.removeItem('school_board_news');
-                localStorage.removeItem('school_board_blog');
-                location.reload();
-            }
-        }
-
-        // Utility XSS Sanitizer
         function escapeHtml(str) {
-            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+            if (!str) return '';
+            return str.replace(/&/g, "&amp;")
+                      .replace(/</g, "&lt;")
+                      .replace(/>/g, "&gt;")
+                      .replace(/"/g, "&quot;")
+                      .replace(/'/g, "&#039;");
         }
     </script>
 </body>
