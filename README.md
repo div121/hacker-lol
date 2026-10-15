@@ -1,2 +1,2 @@
-# hacker-lol
+# schoolnews
 my website conf
