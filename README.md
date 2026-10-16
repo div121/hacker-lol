@@ -1,2 +1,2 @@
 # schoolnews
-my website conf.
+my website config
